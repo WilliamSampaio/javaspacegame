@@ -23,7 +23,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.io.File;
-import java.util.Random;
 
 public final class Fases extends JPanel implements ActionListener {
 
@@ -42,13 +41,28 @@ public final class Fases extends JPanel implements ActionListener {
     private List<Fases> fases;
     private int emJogo;
     private boolean parabens;
+    private int fundoLargura, fundoAltura;
     private int fundox = 0;
     private int fundoy = 0;
-    private int fundo1x = 416;
-    private int fundo1y = 0;
     private int FPS = 50;
     private Sequencer player;
     private String musica1 = "./assets/sound/backsound.mid";
+
+    public int getFundoLargura() {
+        return fundoLargura;
+    }
+
+    public void setFundoLargura(int fundoLargura) {
+        this.fundoLargura = fundoLargura;
+    }
+
+    public int getFundoAltura() {
+        return fundoAltura;
+    }
+
+    public void setFundoAltura(int fundoAltura) {
+        this.fundoAltura = fundoAltura;
+    }
 
     public Image getFundo() {
         return fundo;
@@ -114,22 +128,6 @@ public final class Fases extends JPanel implements ActionListener {
         this.fundoy = fundoy;
     }
 
-    public int getFundo1x() {
-        return fundo1x;
-    }
-
-    public void setFundo1x(int fundo1x) {
-        this.fundo1x = fundo1x;
-    }
-
-    public int getFundo1y() {
-        return fundo1y;
-    }
-
-    public void setFundo1y(int fundo1y) {
-        this.fundo1y = fundo1y;
-    }
-
     public int getFPS() {
         return FPS;
     }
@@ -147,16 +145,9 @@ public final class Fases extends JPanel implements ActionListener {
     }
 
     public void moveFundo() {
-        fundox -= 1;
-        if (fundox <= (-1200)) {
+        fundox -= 4;
+        if (fundox <= -600) {
             fundox = 0;
-        }
-    }
-
-    public void moveFundo1() {
-        fundo1x -= 1;
-        if (fundo1x == 0) {
-            fundo1x = 1200;
         }
     }
 
@@ -286,7 +277,9 @@ public final class Fases extends JPanel implements ActionListener {
         setDoubleBuffered(true);
         addKeyListener(new TecladoAdapter());
 
-        setFundo(new ImageIcon("./assets/img/background_menu.jpg").getImage());
+        this.setFundo(new ImageIcon("./assets/img/background_menu.jpg").getImage());
+        this.setFundoLargura(600);
+        this.setFundoAltura(600);
         setSonic(new Sonic());
         inicializaInimigos();
         setEmJogo(ESTADO_MENU);
@@ -344,14 +337,9 @@ public final class Fases extends JPanel implements ActionListener {
     public void paint(Graphics g) {
 
         Graphics2D graficos = (Graphics2D) g;
-        for (int x = 0; x < 1200; x += 416) {
-            for (int y = 0; y < 600; y += 416) {
-                graficos.drawImage(fundo, x, y, this);
-            }
-        }
-        /*
-        graficos.drawImage(fundo, fundox, fundoy, null);
-        graficos.drawImage(fundo, fundo1x, fundo1y, null);*/
+        graficos.drawImage(this.fundo, this.fundox, this.fundoy, this.getFundoLargura(), this.getFundoAltura(), this);
+        graficos.drawImage(this.fundo, this.fundox + this.getFundoLargura(), this.fundoy, this.getFundoLargura(), this.getFundoAltura(), this);
+        graficos.drawImage(this.fundo, this.fundox + (this.getFundoLargura() * 2), this.fundoy, this.getFundoLargura(), this.getFundoAltura(), this);
 
         switch (emJogo) {
             case ESTADO_EMJOGO -> {
@@ -493,7 +481,6 @@ public final class Fases extends JPanel implements ActionListener {
         }
 
         moveFundo();
-        moveFundo1();
         repaint();
     }
 

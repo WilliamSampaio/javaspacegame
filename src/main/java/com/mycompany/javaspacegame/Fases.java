@@ -35,7 +35,7 @@ public final class Fases extends JPanel implements ActionListener {
     private int vidas = 3;
     private int faseAtual;
     private Image fundo;
-    private Sonic sonic;
+    private Ship spaceship;
     private Timer timer;
     private List<Inimigo> inimigos;
     private List<Fases> fases;
@@ -46,7 +46,7 @@ public final class Fases extends JPanel implements ActionListener {
     private int fundoy = 0;
     private int FPS = 50;
     private Sequencer player;
-    private String musica1 = "./assets/sound/backsound.mid";
+    private String musica = "./assets/sound/backsound.mid";
 
     public int getFundoLargura() {
         return fundoLargura;
@@ -72,12 +72,12 @@ public final class Fases extends JPanel implements ActionListener {
         this.fundo = fundo;
     }
 
-    public Sonic getSonic() {
-        return sonic;
+    public Ship getSonic() {
+        return spaceship;
     }
 
-    public void setSonic(Sonic sonic) {
-        this.sonic = sonic;
+    public void setSonic(Ship sonic) {
+        this.spaceship = sonic;
     }
 
     public Timer getTimer() {
@@ -167,12 +167,12 @@ public final class Fases extends JPanel implements ActionListener {
         this.player = player;
     }
 
-    public String getMusica1() {
-        return musica1;
+    public String getMusica() {
+        return musica;
     }
 
-    public void setMusica1(String musica1) {
-        this.musica1 = musica1;
+    public void setMusica(String musica) {
+        this.musica = musica;
     }
 
     private int[][] coordenadas = {
@@ -280,10 +280,10 @@ public final class Fases extends JPanel implements ActionListener {
         this.setFundo(new ImageIcon("./assets/img/background_menu.jpg").getImage());
         this.setFundoLargura(600);
         this.setFundoAltura(600);
-        setSonic(new Sonic());
+        setSonic(new Ship());
         inicializaInimigos();
         setEmJogo(ESTADO_MENU);
-        tocarMusica(getMusica1(), 1);
+        tocarMusica(getMusica(), 1);
         setTimer(new Timer(250 / getFPS(), this));
         timer.start();
     }
@@ -291,33 +291,33 @@ public final class Fases extends JPanel implements ActionListener {
     public void setFase(int fase) {
         switch (fase) {
             case 1 -> {
-                sonic.setImagem(new ImageIcon("./assets/img/nave1.gif").getImage());
+                spaceship.setImagem(new ImageIcon("./assets/img/nave1.gif").getImage());
                 setFundo(new ImageIcon("./assets/img/background_fase1.jpg").getImage());
-                setSonic(new Sonic());
+                setSonic(new Ship());
                 inicializaInimigos();
             }
             case 2 -> {
-                sonic.setImagem(new ImageIcon("./assets/img/nave2.gif").getImage());
+                spaceship.setImagem(new ImageIcon("./assets/img/nave2.gif").getImage());
                 setFundo(new ImageIcon("./assets/img/background_fase2.jpg").getImage());
-                setSonic(new Sonic());
+                setSonic(new Ship());
                 inicializaInimigos();
             }
             case 3 -> {
-                sonic.setImagem(new ImageIcon("./assets/img/nave1.gif").getImage());
+                spaceship.setImagem(new ImageIcon("./assets/img/nave1.gif").getImage());
                 setFundo(new ImageIcon("./assets/img/background_fase3.jpg").getImage());
-                setSonic(new Sonic());
+                setSonic(new Ship());
                 inicializaInimigos();
             }
             case 4 -> {
-                sonic.setImagem(new ImageIcon("./assets/img/nave2.gif").getImage());
+                spaceship.setImagem(new ImageIcon("./assets/img/nave2.gif").getImage());
                 setFundo(new ImageIcon("./assets/img/background_fase4.jpg").getImage());
-                setSonic(new Sonic());
+                setSonic(new Ship());
                 inicializaInimigos();
             }
             case 5 -> {
                 setFundo(new ImageIcon("./assets/img/background_menu.jpg").getImage());
                 inicializaInimigos();
-                setSonic(new Sonic());
+                setSonic(new Ship());
             }
 
         }
@@ -343,9 +343,9 @@ public final class Fases extends JPanel implements ActionListener {
 
         switch (emJogo) {
             case ESTADO_EMJOGO -> {
-                graficos.drawImage(sonic.getImagem(), sonic.getX(), sonic.getY(), sonic.getAltura() / 2, sonic.getLargura() / 2, this);
+                graficos.drawImage(spaceship.getImagem(), spaceship.getX(), spaceship.getY(), spaceship.getAltura() / 2, spaceship.getLargura() / 2, this);
 
-                List<Missel> misseis = sonic.getMisseis();
+                List<Missel> misseis = spaceship.getMisseis();
                 for (int i = 0; i < misseis.size(); i++) {
 
                     Missel m = (Missel) misseis.get(i);
@@ -451,7 +451,7 @@ public final class Fases extends JPanel implements ActionListener {
             emJogo = ESTADO_FASECONCLUIDA;
         }
 
-        List<Missel> misseis = sonic.getMisseis();
+        List<Missel> misseis = spaceship.getMisseis();
 
         for (int i = 0; i < misseis.size(); i++) {
 
@@ -475,7 +475,7 @@ public final class Fases extends JPanel implements ActionListener {
             }
         }
 
-        sonic.mexer();
+        spaceship.mexer();
         if (faseAtual != 5) {
             checarColisoes();
         }
@@ -486,7 +486,7 @@ public final class Fases extends JPanel implements ActionListener {
 
     public void checarColisoes() {
 
-        Rectangle formaNave = sonic.getBounds();
+        Rectangle formaNave = spaceship.getBounds();
         Rectangle formaInimigo;
         Rectangle formaMissel;
 
@@ -497,14 +497,14 @@ public final class Fases extends JPanel implements ActionListener {
 
             if (formaNave.intersects(formaInimigo)) {
 
-                sonic.setIsVisible(false);
+                spaceship.setIsVisible(false);
                 tempInimigo.setIsVisible(false);
 
                 emJogo = ESTADO_GAMEOVER;
             }
         }
 
-        List<Missel> misseis = sonic.getMisseis();
+        List<Missel> misseis = spaceship.getMisseis();
 
         for (int i = 0; i < misseis.size(); i++) {
 
@@ -532,12 +532,12 @@ public final class Fases extends JPanel implements ActionListener {
         public void keyPressed(KeyEvent e) {
 
             if (e.getKeyCode() == KeyEvent.VK_1) {
-                sonic.setImagem(new ImageIcon("./assets/img/nave1.gif").getImage());
+                spaceship.setImagem(new ImageIcon("./assets/img/nave1.gif").getImage());
                 naveAtual = 1;
             }
 
             if (e.getKeyCode() == KeyEvent.VK_2) {
-                sonic.setImagem(new ImageIcon("./assets/img/nave2.gif").getImage());
+                spaceship.setImagem(new ImageIcon("./assets/img/nave2.gif").getImage());
                 naveAtual = 2;
             }
 
@@ -566,7 +566,7 @@ public final class Fases extends JPanel implements ActionListener {
                 }
 
             }
-            sonic.keyPressed(e);
+            spaceship.keyPressed(e);
 
             if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 emJogo = ESTADO_MENU;
@@ -575,7 +575,7 @@ public final class Fases extends JPanel implements ActionListener {
 
         @Override
         public void keyReleased(KeyEvent e) {
-            sonic.keyReleased(e);
+            spaceship.keyReleased(e);
         }
     }
 

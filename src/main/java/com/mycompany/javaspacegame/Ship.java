@@ -8,7 +8,7 @@ import java.util.List;
 
 import javax.swing.ImageIcon;
 
-public final class Sonic {
+public final class Ship {
 
     private int x, y;
     private int dx, dy;
@@ -91,7 +91,7 @@ public final class Sonic {
 
     
     
-    public Sonic() {
+    public Ship() {
         setImagem(new ImageIcon("./assets/img/nave1.gif").getImage());
         setAltura(imagem.getHeight(null) / 2);
         setLargura(imagem.getHeight(null) / 2);
